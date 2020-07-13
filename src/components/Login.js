@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../App.css";
+import { Link } from "react-router-dom";
 export default function Login() {
   const [username, setusername] = useState("");
   const [password, setPwd] = useState("");
@@ -9,6 +10,7 @@ export default function Login() {
     event.preventDefault();
     console.log(username, password, room);
   };
+
   return (
     <div className="join-container">
       <header className="join-header">
@@ -58,6 +60,9 @@ export default function Login() {
           <button type="submit" className="btn">
             Join Chat
           </button>
+          <Link to="/register">
+            <button className="btn">Register</button>
+          </Link>
         </form>
       </main>
     </div>
