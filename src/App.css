@@ -170,10 +170,7 @@ a {
 .join-main .form-control {
   margin-bottom: 20px;
 }
-input,
-select {
-  border-radius: 12px;
-}
+
 .join-main label {
   display: block;
   margin-bottom: 5px;
