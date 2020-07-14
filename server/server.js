@@ -4,6 +4,8 @@ const bodyparser = require("body-parser");
 const path = require("path");
 const cors = require("cors");
 const { connectdb } = require("./db-connect");
+const router = require("./router");
+
 //initiliaze express app
 const app = express();
 
@@ -15,14 +17,12 @@ app.use(cors(), bodyparser.urlencoded({ extended: true }), bodyparser.json());
 //db-connection test
 connectdb();
 
+//configure router
+app.use("/api/chat", router);
+
 //port definition
 let port = process.env.PORT || process.env.API_PORT;
 app.listen(port, () => console.log("API Server running on", port));
-
-app.get("/test", (req, res) => {
-  console.log("test route");
-  res.send("test works");
-});
 
 //production config
 if (process.env.NODE_ENV === "production") {
