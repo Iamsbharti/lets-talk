@@ -32,7 +32,6 @@ exports.loginParamValidation = (req, res, next) => {
       .string()
       .pattern(new RegExp("^[A-Za-z0-9]\\w{7,}$"))
       .required(),
-    authToken: joi.string().alphanum().required(),
   });
   //set false flag to get all the required validation errors
   let options = { abortEarly: false };
