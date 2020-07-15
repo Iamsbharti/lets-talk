@@ -27,9 +27,14 @@ exports.registerControl = async (req, res) => {
   await User.create(newUser, (error, user) => {
     console.log(error, user);
     if (error === null) {
+      //delete additional items
+      let usr_res = user.toObject();
+      delete usr_res.password;
+      delete usr_res._id;
+      delete usr_res.__v;
       return res
         .status(200)
-        .json(response(false, 200, "User Created Success", user));
+        .json(response(false, 200, "User Created Success", usr_res));
     } else {
       console.log(user);
       return res
