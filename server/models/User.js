@@ -22,4 +22,4 @@ let schema = mongoose.Schema({
     default: Date.now(),
   },
 });
-module.exports = mongoose.model(schema);
+module.exports = mongoose.model("User", schema);
