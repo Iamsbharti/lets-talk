@@ -49,14 +49,11 @@ exports.loginParamValidation = (req, res, next) => {
 };
 exports.authTokenParamValidation = (req, res, next) => {
   console.log("auth token param validation", req.header("authToken"));
-  let authToken = req.header("authToken");
-  let validate = {
-    authToken: authToken,
-  };
+  let authToken = { authToken: req.header("authToken") };
   const schema = joi.object({
     authToken: joi.string().min(15).required(),
   });
-  let { error } = schema.validate(validate);
+  let { error } = schema.validate(authToken);
   if (error)
     return res
       .status(401)
