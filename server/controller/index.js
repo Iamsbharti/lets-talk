@@ -13,7 +13,7 @@ exports.loginControl = async (req, res) => {
   const emailExistence = async () => {
     console.log("email existence call");
     let user = await User.findOne({ email: email });
-    console.log(user.password);
+    console.log(user);
     return !user
       ? Promise.reject(response(true, 404, "user doesn't exists", email))
       : Promise.resolve(user);
