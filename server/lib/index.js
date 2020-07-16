@@ -14,3 +14,7 @@ exports.hashedPassword = async (pwd) => {
   let hashed = await bcrypt.hash(pwd, salt);
   return hashed;
 };
+exports.compareHashedPwd = async (hashedPwd, pwd) => {
+  console.log("compare passwords");
+  return await bcrypt.compare(pwd, hashedPwd);
+};

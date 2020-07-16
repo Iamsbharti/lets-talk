@@ -1,8 +1,26 @@
 const User = require("../models/User");
-const { response, hashedPassword } = require("../lib");
+const { response, hashedPassword, compareHashedPwd } = require("../lib");
 exports.loginControl = async (req, res) => {
   console.log("login control control");
-  res.send("login success");
+  const { email, password } = req.body;
+  //check user existence
+  let userExists = await User.findOne({ email: email });
+
+  /**If not found return  */
+  if (!userExists)
+    return res
+      .status(400)
+      .send(response(true, 400, "User Not Found ,Register", email));
+
+  /**credential match if user found */
+  let validCred = await compareHashedPwd(userExists.password, password);
+  if (!validCred)
+    return res.status(400).json(true, 400, "Wrong Password", null);
+
+  //generate token
+  if (validCred) {
+  }
+  //save token
 };
 exports.test = async (req, res) => {
   console.log("test route");
