@@ -1,5 +1,8 @@
 const joi = require("@hapi/joi");
 const { response } = require("../lib");
+const jwt = require("jsonwebtoken");
+const Auth = require("../models/Auth");
+
 exports.registrationParamValidation = async (req, res, next) => {
   //create joi schema with validation params
   let schema = joi.object({
@@ -44,6 +47,22 @@ exports.loginParamValidation = (req, res, next) => {
   }
   next();
 };
+exports.authTokenParamValidation = (req, res, next) => {
+  console.log("auth token param validation", req.header("authToken"));
+  let authToken = req.header("authToken");
+  let validate = {
+    authToken: authToken,
+  };
+  const schema = joi.object({
+    authToken: joi.string().min(15).required(),
+  });
+  let { error } = schema.validate(validate);
+  if (error)
+    return res
+      .status(401)
+      .json(response(true, 401, "AuthToken Error", error.details[0].message));
+  next();
+};
 exports.notfound = (req, res, next) => {
   res.status(400).json(response(true, 400, "Path Not Found", req.path));
   next();
@@ -56,5 +75,9 @@ exports.logIp = (req, res, next) => {
   console.log(
     `${method} requested by -${ip} for path -${path} using ${protocol}`
   );
+  next();
+};
+exports.isAuthorized = (req, res, next) => {
+  console.log("is authorized middleware");
   next();
 };
