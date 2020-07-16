@@ -5,6 +5,7 @@ const {
   compareHashedPwd,
   generateToken,
 } = require("../lib");
+const Auth = require("../models/Auth");
 exports.loginControl = async (req, res) => {
   console.log("login control control");
   const { email, password } = req.body;
@@ -12,15 +13,17 @@ exports.loginControl = async (req, res) => {
   const emailExistence = async () => {
     console.log("email existence call");
     let user = await User.findOne({ email: email });
-    //console.log(user.password);
+    console.log(user.password);
     return !user
       ? Promise.reject(response(true, 404, "user doesn't exists", email))
       : Promise.resolve(user);
   };
   //credmatch
   const credentialMatch = async (user) => {
+    console.log("cred match");
     let credMatch = await compareHashedPwd(user.password, password);
     if (credMatch) {
+      console.log("password matched");
       /** delete additional properties of user*/
       let userDetails = user.toObject();
       delete userDetails.password;
@@ -28,6 +31,7 @@ exports.loginControl = async (req, res) => {
       delete userDetails._id;
       return Promise.resolve(userDetails);
     } else {
+      console.log("password doesn't match");
       return Promise.reject(
         response(true, 400, "Password Doesn't match", null)
       );
@@ -35,14 +39,17 @@ exports.loginControl = async (req, res) => {
   };
   //generate token
   const getToken = async (userDetails) => {
+    console.log("gene token");
     let getTokenRes;
     await generateToken(userDetails, (error, tokenDetails) => {
       if (error !== null) {
+        console.log("error gen token");
         getTokenRes = Promise.reject(
           response(true, 500, "Token Generation Error", error)
         );
       } else {
-        tokenDetails.userDeatils = userDetails;
+        console.log("token generated", tokenDetails);
+        tokenDetails.userDetails = userDetails;
         getTokenRes = Promise.resolve(tokenDetails);
       }
     });
@@ -50,7 +57,25 @@ exports.loginControl = async (req, res) => {
   };
   //save token
   const saveToken = async (tokenDetails) => {
+    let saveTokenRes;
     console.log("save token", tokenDetails);
+    const { userDetails, authToken } = tokenDetails;
+    const { email } = userDetails;
+    let newAuthToken = new Auth({
+      email: email,
+      authToken: authToken,
+      tokenSecret: process.env.TOKEN_SECRET,
+    });
+    let tokenSaved = await Auth.create(newAuthToken);
+    if (tokenSaved) {
+      saveTokenRes = Promise.resolve(tokenDetails);
+    } else {
+      saveTokenRes = Promise.reject(
+        response(true, 500, "Token Save Error", null)
+      );
+    }
+
+    return saveTokenRes;
   };
   //login func start
   emailExistence()
@@ -59,9 +84,11 @@ exports.loginControl = async (req, res) => {
     .then(saveToken)
     .then((result) => {
       console.log(result);
+      res.send(response(false, 200, "Login Success", result));
     })
     .catch((error) => {
       console.log(error);
+      res.status(error.status).json(error);
     });
 };
 exports.test = async (req, res) => {
