@@ -44,3 +44,17 @@ exports.loginParamValidation = (req, res, next) => {
   }
   next();
 };
+exports.notfound = (req, res, next) => {
+  res.status(400).json(response(true, 400, "Path Not Found", req.path));
+  next();
+};
+exports.logIp = (req, res, next) => {
+  const ip = req.ip;
+  const path = req.originalUrl;
+  let protocol = req.protocol;
+  let method = req.method;
+  console.log(
+    `${method} requested by -${ip} for path -${path} using ${protocol}`
+  );
+  next();
+};
