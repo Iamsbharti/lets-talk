@@ -61,18 +61,33 @@ exports.loginControl = async (req, res) => {
     console.log("save token", tokenDetails);
     const { userDetails, authToken } = tokenDetails;
     const { email } = userDetails;
-    let newAuthToken = new Auth({
-      email: email,
+    const tokenSecret = process.env.TOKEN_SECRET;
+    /**Check for existing entry */
+    let userAuthExists = await Auth.findOne({ email: email });
+    /**Auth Found , update*/
+    let updateAuthParam = {
       authToken: authToken,
-      tokenSecret: process.env.TOKEN_SECRET,
-    });
-    let tokenSaved = await Auth.create(newAuthToken);
-    if (tokenSaved) {
-      saveTokenRes = Promise.resolve(tokenDetails);
+      createdOn: Date.now(),
+      tokenSecret: tokenSecret,
+    };
+    let query = { email: email };
+    if (userAuthExists) {
+      console.log("update token");
+      let updatedAuth = await Auth.updateOne(query, updateAuthParam);
+      saveTokenRes = updatedAuth
+        ? Promise.resolve(tokenDetails)
+        : Promise.reject(response(true, 500, "Token update error", null));
     } else {
-      saveTokenRes = Promise.reject(
-        response(true, 500, "Token Save Error", null)
-      );
+      console.log("create token");
+      let newAuthToken = new Auth({
+        email: email,
+        authToken: authToken,
+        tokenSecret: tokenSecret,
+      });
+      let tokenSaved = await Auth.create(newAuthToken);
+      saveTokenRes = tokenSaved
+        ? Promise.resolve(tokenDetails)
+        : Promise.reject(response(true, 500, "Token Save Error", null));
     }
 
     return saveTokenRes;
@@ -84,7 +99,7 @@ exports.loginControl = async (req, res) => {
     .then(saveToken)
     .then((result) => {
       console.log(result);
-      res.send(response(false, 200, "Login Success", result));
+      res.status(200).json(response(false, 200, "Login Success", result));
     })
     .catch((error) => {
       console.log(error);
