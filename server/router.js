@@ -17,8 +17,8 @@ router.get("/login", loginParamValidation, loginControl);
 router.post("/register", registrationParamValidation, registerControl);
 router.get(
   "/private",
-  isAuthorized,
   authTokenParamValidation,
+  isAuthorized,
   privateRouteTest
 );
 module.exports = router;

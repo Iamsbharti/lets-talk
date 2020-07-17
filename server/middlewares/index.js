@@ -74,9 +74,40 @@ exports.logIp = (req, res, next) => {
   );
   next();
 };
-exports.isAuthorized = (req, res, next) => {
+exports.isAuthorized = async (req, res, next) => {
   console.log("is authorized middleware", req.header("authToken"));
   //get header
-
+  if (
+    req.header("authToken") !== null ||
+    req.header("authToken") !== undefined ||
+    req.header("authToken") !== ""
+  ) {
+    //find the token entry
+    let authTokenReqParam = req.header("authToken");
+    let authExist = await Auth.findOne({ authToken: authTokenReqParam });
+    if (authExist) {
+      const { authToken, tokenSecret, email } = authExist;
+      console.log("value from db", authToken, tokenSecret, email);
+      //decode and match
+      jwt.verify(authToken, tokenSecret, (error, decodedInfo) => {
+        if (error !== null) {
+          return res
+            .staus(401)
+            .json(response(true, 401, "Auth Token is not Valid", null));
+        } else {
+          console.log("decoded", decodedInfo);
+          return (req.email = decodedInfo.data.email);
+        }
+      });
+    } else {
+      return res
+        .status(404)
+        .json(true, 404, "AuthToken not Valid,login again", null);
+    }
+  } else {
+    return res
+      .status(400)
+      .json(response(true, 400, "Auth Token is Required", null));
+  }
   next();
 };

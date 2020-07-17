@@ -151,6 +151,6 @@ exports.registerControl = async (req, res) => {
   });
 };
 exports.privateRouteTest = async (req, res) => {
-  console.log("private router");
+  console.log("private router", req.email);
   res.send("pvt route");
 };
