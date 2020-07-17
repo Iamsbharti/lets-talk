@@ -75,6 +75,8 @@ exports.logIp = (req, res, next) => {
   next();
 };
 exports.isAuthorized = (req, res, next) => {
-  console.log("is authorized middleware");
+  console.log("is authorized middleware", req.header("authToken"));
+  //get header
+
   next();
 };

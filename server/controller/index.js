@@ -6,6 +6,7 @@ const {
   generateToken,
 } = require("../lib");
 const Auth = require("../models/Auth");
+
 exports.loginControl = async (req, res) => {
   console.log("login control control");
   const { email, password } = req.body;
@@ -99,7 +100,11 @@ exports.loginControl = async (req, res) => {
     .then(saveToken)
     .then((result) => {
       console.log(result);
-      res.status(200).json(response(false, 200, "Login Success", result));
+      let api_res = result;
+      let { authToken } = result;
+      delete api_res.authToken;
+      res.header("authToken", authToken);
+      res.status(200).json(response(false, 200, "Login Success", api_res));
     })
     .catch((error) => {
       console.log(error);
