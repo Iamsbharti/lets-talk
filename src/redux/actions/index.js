@@ -6,12 +6,12 @@ export function loginAction(userdata) {
     dispatch({ type: LOGIN, userdata });
   };
 }
-export async function signUpAction(userdata) {
-  console.log("signup-action");
-  //call api
-  let signUpResult = await register(userdata);
-  console.log("signUpResult", signUpResult);
-  return (dispatch) => {
+export function signUpAction(userdata) {
+  console.log("signup-action-call");
+  return async (dispatch) => {
+    //call api
+    let signUpResult = await register(userdata);
+    console.log("signUpResult,action", signUpResult);
     dispatch({ type: SIGNUP, signUpResult });
   };
 }

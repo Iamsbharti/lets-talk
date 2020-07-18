@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { signUpAction } from "../redux/actions";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
-function Register({ signUpAction }) {
+function Register({ signUpAction, registerStatus }) {
   //define state
   const [firstName, setFname] = useState("");
   const [lastName, setLname] = useState("");
@@ -19,6 +19,9 @@ function Register({ signUpAction }) {
     };
     console.log("signup action", userdata);
     signUpAction(userdata);
+    if (registerStatus) {
+      Redirect("/");
+    }
   };
 
   return (
@@ -87,8 +90,8 @@ function Register({ signUpAction }) {
     </div>
   );
 }
-const mapStateToProps = ({ registerStatus }) => {
-  return registerStatus;
+const mapStateToProps = ({ signUpResult }) => {
+  return { signUpResult };
 };
 const mapActionsToProps = {
   signUpAction,

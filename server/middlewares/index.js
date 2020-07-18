@@ -23,7 +23,9 @@ exports.registrationParamValidation = async (req, res, next) => {
   if (error) {
     let errorsArr = [];
     error.details.map((err) => errorsArr.push(err.message));
-    return res.status(403).json(response(true, "401", errorsArr, null));
+    return Promise.reject(
+      res.status(403).json(response(true, "401", errorsArr, null))
+    );
   }
 
   next();
