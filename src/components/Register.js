@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { register } from "../api";
+import { signUpAction } from "../redux/actions";
 import { Link } from "react-router-dom";
-export default function Register() {
+import { connect } from "react-redux";
+function Register({ signUpAction }) {
   //define state
   const [firstName, setFname] = useState("");
   const [lastName, setLname] = useState("");
@@ -10,9 +11,14 @@ export default function Register() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("api call", firstName, lastName, email, password);
-    let result = await register(firstName, lastName, email, password);
-    console.log(result);
+    let userdata = {
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      password: password,
+    };
+    console.log("signup action", userdata);
+    signUpAction(userdata);
   };
 
   return (
@@ -81,3 +87,10 @@ export default function Register() {
     </div>
   );
 }
+const mapStateToProps = ({ registerStatus }) => {
+  return registerStatus;
+};
+const mapActionsToProps = {
+  signUpAction,
+};
+export default connect(mapStateToProps, mapActionsToProps)(Register);

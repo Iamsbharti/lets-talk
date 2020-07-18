@@ -7,15 +7,15 @@ import configureStore from "./redux/store";
 import { Provider as ReduxProvider } from "react-redux";
 
 //initiliaze store
-let store = configureStore();
+const store = configureStore();
 
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <ReduxProvider store={store}>
+    <ReduxProvider store={store}>
+      <BrowserRouter>
         <App />
-      </ReduxProvider>
-    </BrowserRouter>
+      </BrowserRouter>
+    </ReduxProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );
