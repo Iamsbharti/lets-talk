@@ -1,9 +1,10 @@
 import { SIGNUP, LOGIN } from "./actionType";
-import { register } from "../../api";
+import { register, login } from "../../api";
 export function loginAction(userdata) {
   console.log("login-action");
-  return (dispatch) => {
-    dispatch({ type: LOGIN, userdata });
+  return async (dispatch) => {
+    let loginResponse = await login(userdata);
+    dispatch({ type: LOGIN, loginResponse });
   };
 }
 export function signUpAction(userdata) {

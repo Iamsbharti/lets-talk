@@ -108,7 +108,7 @@ exports.loginControl = async (req, res) => {
     })
     .catch((error) => {
       console.log(error);
-      res.status(error.status).json(error);
+      res.json(error);
     });
 };
 exports.test = async (req, res) => {
