@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { signUpAction } from "../redux/actions";
-import { Link, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-function Register({ signUpAction, registerStatus }) {
+function Register({ signUpAction, signUpResult }) {
   //define state
   const [firstName, setFname] = useState("");
   const [lastName, setLname] = useState("");
@@ -19,11 +19,15 @@ function Register({ signUpAction, registerStatus }) {
     };
     console.log("signup action", userdata);
     signUpAction(userdata);
-    if (registerStatus) {
-      Redirect("/");
-    }
   };
-
+  useEffect(() => {
+    if (signUpResult === "User Exists") {
+      setFname("");
+      setLname("");
+      setEmail("");
+      setPwd("");
+    }
+  }, [signUpResult]);
   return (
     <div className="join-container">
       <header className="join-header">
