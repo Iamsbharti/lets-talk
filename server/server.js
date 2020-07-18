@@ -23,6 +23,15 @@ connectdb();
 app.use("/api/chat", router);
 
 app.use(notfound);
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "X-Powered-By,Access-Control-Allow-Origin, Content-Type, ETag, authToken)"
+  );
+  next();
+});
 //port definition
 let port = process.env.PORT || process.env.API_PORT;
 app.listen(port, () => console.log("API Server running on", port));

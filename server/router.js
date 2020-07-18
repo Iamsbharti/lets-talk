@@ -13,7 +13,7 @@ const {
 } = require("./middlewares");
 
 router.get("/test", test);
-router.get("/login", loginParamValidation, loginControl);
+router.post("/login", loginParamValidation, loginControl);
 router.post("/register", registrationParamValidation, registerControl);
 router.get(
   "/private",

@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import "../App.css";
 import { Link } from "react-router-dom";
-export default function Login() {
+import { connect } from "react-redux";
+import { loginAction } from "../redux/actions";
+function Login({ loginAction, loginResponse }) {
   const [username, setusername] = useState("");
   const [password, setPwd] = useState("");
   const [room, setRoom] = useState("");
@@ -9,6 +11,11 @@ export default function Login() {
   const handleLogin = (event) => {
     event.preventDefault();
     console.log(username, password, room);
+    let userdata = {
+      email: username,
+      password: password,
+    };
+    loginAction(userdata);
   };
 
   return (
@@ -68,3 +75,8 @@ export default function Login() {
     </div>
   );
 }
+const mapStateToProps = ({ loginResponse }) => {
+  return { loginResponse };
+};
+const mapActionToProps = { loginAction };
+export default connect(mapStateToProps, mapActionToProps)(Login);

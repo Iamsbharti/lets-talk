@@ -4,13 +4,14 @@ import { toast } from "react-toastify";
 const url =
   process.env.NODE_ENV === "production" ? "" : "http://localhost:4300/api/chat";
 export async function login({ email, password }) {
-  console.log("api-call-login");
+  console.log("api-call-login", email, password);
+
   try {
-    let response = await axios.get(url + "/login", {
+    let response = await axios.post(url + "/login", {
       email: email,
       password: password,
     });
-    console.log("response", response);
+    console.log("response", response.config);
     let { error, status, message, data } = response.data;
 
     if (error) {
@@ -24,8 +25,7 @@ export async function login({ email, password }) {
       /**Sucess response */
       let { firstName, lastName } = data.userDetails;
       console.log(firstName, lastName);
-      let { authToken } = response.headers;
-      console.log("auth", authToken);
+      console.log("auth", response.headers["authToken"]);
       console.log("message", message);
       toast.success(message);
       return message;
