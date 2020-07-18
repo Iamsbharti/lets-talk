@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const Auth = require("../models/Auth");
 
 exports.registrationParamValidation = async (req, res, next) => {
+  console.log("validation");
   //create joi schema with validation params
   let schema = joi.object({
     firstName: joi.string().min(5).required(),
