@@ -11,7 +11,8 @@ export async function login({ email, password }) {
       email: email,
       password: password,
     });
-    console.log("response", response.config);
+    //console.log("response", response);
+
     let { error, status, message, data } = response.data;
 
     if (error) {
@@ -23,6 +24,9 @@ export async function login({ email, password }) {
       return message;
     } else {
       /**Sucess response */
+      let { authToken } = data;
+      console.log(authToken);
+      localStorage.setItem("authToken", authToken);
       let { firstName, lastName } = data.userDetails;
       console.log(firstName, lastName);
       console.log("auth", response.headers["authToken"]);

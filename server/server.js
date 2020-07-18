@@ -28,7 +28,7 @@ app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
   res.header(
     "Access-Control-Allow-Headers",
-    "X-Powered-By,Access-Control-Allow-Origin, Content-Type, ETag, authToken)"
+    "Origin, X-Requested-With, Content-Type, Accept, authToken, access-control-allow-origin"
   );
   next();
 });

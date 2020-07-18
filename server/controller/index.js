@@ -102,7 +102,7 @@ exports.loginControl = async (req, res) => {
       console.log(result);
       let api_res = result;
       let { authToken } = result;
-      delete api_res.authToken;
+      //delete api_res.authToken;
       res.header("authToken", authToken);
       res.status(200).json(response(false, 200, "Login Success", api_res));
     })
