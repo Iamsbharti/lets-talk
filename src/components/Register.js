@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import { signUpAction } from "../redux/actions";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import { useHistory } from "react-router-dom";
 function Register({ signUpAction, signUpResult }) {
   //define state
   const [firstName, setFname] = useState("");
   const [lastName, setLname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPwd] = useState("");
+  let history = useHistory();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -20,14 +22,18 @@ function Register({ signUpAction, signUpResult }) {
     console.log("signup action", userdata);
     signUpAction(userdata);
   };
+  //init history
+
   useEffect(() => {
     if (signUpResult === "User Exists") {
       setFname("");
       setLname("");
       setEmail("");
       setPwd("");
+    } else if (signUpResult === "User Created Success") {
+      history.push("/");
     }
-  }, [signUpResult]);
+  }, [signUpResult, history]);
   return (
     <div className="join-container">
       <header className="join-header">

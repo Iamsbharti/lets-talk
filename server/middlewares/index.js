@@ -23,9 +23,7 @@ exports.registrationParamValidation = async (req, res, next) => {
   if (error) {
     let errorsArr = [];
     error.details.map((err) => errorsArr.push(err.message));
-    return Promise.reject(
-      res.status(403).json(response(true, "401", errorsArr, null))
-    );
+    return Promise.reject(res.json(response(true, "401", errorsArr, null)));
   }
 
   next();
@@ -46,7 +44,7 @@ exports.loginParamValidation = (req, res, next) => {
   if (error) {
     let errorsArr = [];
     error.details.map((err) => errorsArr.push(err.message));
-    return res.status(403).json(response(true, "401", errorsArr, null));
+    return res.json(response(true, "401", errorsArr, null));
   }
   next();
 };
@@ -58,13 +56,13 @@ exports.authTokenParamValidation = (req, res, next) => {
   });
   let { error } = schema.validate(authToken);
   if (error)
-    return res
-      .status(401)
-      .json(response(true, 401, "AuthToken Error", error.details[0].message));
+    return res.json(
+      response(true, 401, "AuthToken Error", error.details[0].message)
+    );
   next();
 };
 exports.notfound = (req, res, next) => {
-  res.status(400).json(response(true, 400, "Path Not Found", req.path));
+  res.json(response(true, 400, "Path Not Found", req.path));
   next();
 };
 exports.logIp = (req, res, next) => {
