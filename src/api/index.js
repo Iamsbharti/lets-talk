@@ -26,6 +26,7 @@ export async function login({ email, password }) {
       /**Sucess response */
       let { authToken } = data;
       console.log(authToken);
+      /**Store AuthToken for chat authorization*/
       localStorage.setItem("authToken", authToken);
       let { firstName, lastName } = data.userDetails;
       console.log(firstName, lastName);
