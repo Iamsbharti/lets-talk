@@ -1,7 +1,7 @@
 import React from "react";
 import "../App.css";
 import { connect } from "react-redux";
-function Chat({ roomname, username }) {
+function Chat({ roomname, firstName, lastName }) {
   const handleLogout = (event) => {
     event.preventDefault();
     console.log("Logout");
@@ -10,9 +10,10 @@ function Chat({ roomname, username }) {
     <div className="chat-container">
       <header className="chat-header">
         <h1>
-          <i className="fas fa-comments"></i>Let's Talk
+          <i className="fas fa-comments"></i>
+          {`${firstName},${lastName}`}
         </h1>
-        {username}
+
         <h2 className="logout-div" onClick={handleLogout}>
           <i className="fas fa-sign-out-alt"></i>Logout
         </h2>
@@ -47,6 +48,9 @@ function Chat({ roomname, username }) {
     </div>
   );
 }
-const mapStateToProps = () => {};
+const mapStateToProps = ({ loginResponse }) => {
+  let { firstName, lastName } = loginResponse;
+  return { firstName, lastName };
+};
 const mapActionToProps = {};
 export default connect(mapStateToProps, mapActionToProps)(Chat);
