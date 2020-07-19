@@ -1,10 +1,10 @@
 import React from "react";
 import "../App.css";
 import { connect } from "react-redux";
-function Chat({ roomname, firstName, lastName }) {
+function Chat({ firstName, lastName, email, room }) {
   const handleLogout = (event) => {
     event.preventDefault();
-    console.log("Logout");
+    console.log("Logout", email);
   };
   return (
     <div className="chat-container">
@@ -23,7 +23,7 @@ function Chat({ roomname, firstName, lastName }) {
           <h3>
             <i className="far fa-comment-alt">Room Name</i>
           </h3>
-          <h2>{roomname}</h2>
+          <h2>{room}</h2>
           <h3>
             <i className="fas fa-users"></i>Users
           </h3>
@@ -49,8 +49,9 @@ function Chat({ roomname, firstName, lastName }) {
   );
 }
 const mapStateToProps = ({ loginResponse }) => {
-  let { firstName, lastName } = loginResponse;
-  return { firstName, lastName };
+  let { firstName, lastName, email, room } = loginResponse;
+  console.log("state-chat", room);
+  return { firstName, lastName, email, room };
 };
 const mapActionToProps = {};
 export default connect(mapStateToProps, mapActionToProps)(Chat);

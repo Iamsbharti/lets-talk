@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 
 const url =
   process.env.NODE_ENV === "production" ? "" : "http://localhost:4300/api/chat";
-export async function login({ email, password }) {
+export async function login({ email, password, room }) {
   console.log("api-call-login", email, password);
 
   try {
@@ -25,20 +25,21 @@ export async function login({ email, password }) {
     } else {
       /**Sucess response */
       let { authToken } = data;
-      console.log(authToken);
+      //console.log(authToken);
       /**Store AuthToken for chat authorization*/
       localStorage.setItem("authToken", authToken);
       let { firstName, lastName } = data.userDetails;
       localStorage.setItem("firstName", firstName);
       localStorage.setItem("lastName", lastName);
-      console.log(firstName, lastName);
-      console.log("auth", response.headers["authToken"]);
-      console.log("message", message);
+      //console.log(firstName, lastName);
+      console.log("message", message, room);
       toast.success(message);
       let userdata = {
         firstName: firstName,
         lastName: lastName,
+        email: email,
         loggedIn: true,
+        room: room,
       };
       return userdata;
     }

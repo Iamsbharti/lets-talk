@@ -16,6 +16,7 @@ function Login({ loginAction, loggedIn }) {
     let userdata = {
       email: username,
       password: password,
+      room: room,
     };
     loginAction(userdata);
   };
