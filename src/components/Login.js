@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../App.css";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import { loginAction } from "../redux/actions";
 function Login({ loginAction, loginResponse }) {
+  /**define state */
   const [username, setusername] = useState("");
   const [password, setPwd] = useState("");
   const [room, setRoom] = useState("");
+  let history = useHistory();
 
   const handleLogin = (event) => {
     event.preventDefault();
@@ -17,7 +19,9 @@ function Login({ loginAction, loginResponse }) {
     };
     loginAction(userdata);
   };
-
+  useEffect(() => {
+    loginResponse && setTimeout(() => history.push("/chat"), 1500);
+  }, [loginResponse, history]);
   return (
     <div className="join-container">
       <header className="join-header">
@@ -70,6 +74,7 @@ function Login({ loginAction, loginResponse }) {
           <Link to="/register">
             <button className="btn">Register</button>
           </Link>
+          {!loginResponse && <span>Login Falied</span>}
         </form>
       </main>
     </div>
