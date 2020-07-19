@@ -156,4 +156,22 @@ exports.privateRouteTest = async (req, res) => {
 };
 exports.logout = async (req, res) => {
   console.log("logout routes", req.body);
+  let { email } = req.body;
+  //delete the auth details from auth-db
+  let userExists = await User.findOne({ email: email });
+  if (!userExists) return res.json(response(true, 400, "User Not Found", null));
+  //delete the auth details
+  let authExists = await User.findOne({ email: email });
+  if (!authExists)
+    return res.json(response(true, 400, "No Auth Details Found", null));
+  /**delete entry*/
+  let { n } = await Auth.deleteOne({ email: email });
+  console.log("count,", n);
+  if (n === 1) {
+    console.log("Deleted auth");
+    res.status(200).json(response(false, 200, "Logged out", null));
+  } else {
+    console.log("delete error");
+    res.json(response(true, 500, "Logout Error", null));
+  }
 };

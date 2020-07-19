@@ -112,3 +112,14 @@ exports.isAuthorized = async (req, res, next) => {
   }
   next();
 };
+exports.logoutParamValidation = (req, res, next) => {
+  console.log("logout validation");
+  const schema = joi.object({
+    email: joi.string().min(6).email().required(),
+  });
+  let { error } = schema.validate(req.body);
+  if (error) {
+    return res.json(response(true, 400, error.details[0].message, null));
+  }
+  next();
+};
