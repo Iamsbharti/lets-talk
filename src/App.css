@@ -74,7 +74,9 @@ a {
   align-items: center;
   justify-content: space-between;
 }
-
+.logout-div {
+  cursor: pointer;
+}
 .chat-main {
   display: grid;
   grid-template-columns: 1fr 3fr;

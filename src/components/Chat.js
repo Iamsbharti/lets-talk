@@ -2,12 +2,19 @@ import React from "react";
 import "../App.css";
 import { connect } from "react-redux";
 function Chat({ roomname }) {
+  const handleLogout = (event) => {
+    event.preventDefault();
+    console.log("Logout");
+  };
   return (
     <div className="chat-container">
       <header className="chat-header">
         <h1>
           <i className="fas fa-comments"></i>Let's Talk
         </h1>
+        <h2 className="logout-div" onClick={handleLogout}>
+          <i className="fas fa-sign-out-alt"></i>Logout
+        </h2>
       </header>
       <main className="chat-main">
         <div className="chat-sidebar">
