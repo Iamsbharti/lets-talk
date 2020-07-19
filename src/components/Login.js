@@ -3,7 +3,7 @@ import "../App.css";
 import { Link, useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import { loginAction } from "../redux/actions";
-function Login({ loginAction, loginResponse }) {
+function Login({ loginAction, loggedIn }) {
   /**define state */
   const [username, setusername] = useState("");
   const [password, setPwd] = useState("");
@@ -19,9 +19,10 @@ function Login({ loginAction, loginResponse }) {
     };
     loginAction(userdata);
   };
+
   useEffect(() => {
-    loginResponse && setTimeout(() => history.push("/chat"), 1500);
-  }, [loginResponse, history]);
+    loggedIn && setTimeout(() => history.push("/chat"), 1500);
+  }, [loggedIn, history]);
   return (
     <div className="join-container">
       <header className="join-header">
@@ -74,14 +75,15 @@ function Login({ loginAction, loginResponse }) {
           <Link to="/register">
             <button className="btn">Register</button>
           </Link>
-          {!loginResponse && <span>Login Falied</span>}
+          {!loggedIn && <span>Login Falied</span>}
         </form>
       </main>
     </div>
   );
 }
 const mapStateToProps = ({ loginResponse }) => {
-  return { loginResponse };
+  let { loggedIn } = loginResponse;
+  return { loggedIn };
 };
 const mapActionToProps = { loginAction };
 export default connect(mapStateToProps, mapActionToProps)(Login);

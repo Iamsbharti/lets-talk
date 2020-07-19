@@ -154,3 +154,6 @@ exports.privateRouteTest = async (req, res) => {
   console.log("private router", req.email);
   res.send("pvt route");
 };
+exports.logout = async (req, res) => {
+  console.log("logout routes", req.body);
+};

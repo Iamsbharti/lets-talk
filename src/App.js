@@ -11,7 +11,7 @@ function App() {
     <div>
       <Route path="/" exact component={Login} />
       <Route path="/register" exact component={Register} />
-      <Route path="/chat" exact component={Chat} />
+      <Route path="/chat" exact render={() => <Chat />} />
       <ToastContainer autoClose={3000} hideProgressBar />
     </div>
   );

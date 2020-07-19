@@ -15,13 +15,13 @@ export async function login({ email, password }) {
 
     let { error, status, message, data } = response.data;
 
-    if (error) {
-      throw new Error(error);
-    }
     if (status !== 200) {
       /**Error Resposne */
       toast.error(message);
-      return message;
+      let userdata = {
+        loggedIn: false,
+      };
+      return userdata;
     } else {
       /**Sucess response */
       let { authToken } = data;
@@ -29,11 +29,18 @@ export async function login({ email, password }) {
       /**Store AuthToken for chat authorization*/
       localStorage.setItem("authToken", authToken);
       let { firstName, lastName } = data.userDetails;
+      localStorage.setItem("firstName", firstName);
+      localStorage.setItem("lastName", lastName);
       console.log(firstName, lastName);
       console.log("auth", response.headers["authToken"]);
       console.log("message", message);
       toast.success(message);
-      return message;
+      let userdata = {
+        firstName: firstName,
+        lastName: lastName,
+        loggedIn: true,
+      };
+      return userdata;
     }
   } catch (error) {
     toast.error(error);
