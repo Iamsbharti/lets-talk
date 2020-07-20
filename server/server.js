@@ -6,6 +6,7 @@ const cors = require("cors");
 const { connectdb } = require("./db-connect");
 const router = require("./router");
 const { logIp, notfound } = require("./middlewares");
+const { socketServer } = require("./lib/socketServer");
 
 //initiliaze express app
 const app = express();
@@ -34,7 +35,11 @@ app.use(function (req, res, next) {
 });
 //port definition
 let port = process.env.PORT || process.env.API_PORT;
-app.listen(port, () => console.log("API Server running on", port));
+let server = app.listen(port, () => console.log("API Server running on", port));
+
+//attach socket to the sever
+let socketInit = socketServer(server);
+console.log("socketInit", socketInit);
 
 //production config
 if (process.env.NODE_ENV === "production") {
