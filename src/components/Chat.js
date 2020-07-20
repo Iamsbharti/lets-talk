@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "../App.css";
 import { connect } from "react-redux";
 import { logoutAction } from "../redux/actions";
-//import { useHistory } from "react-router-dom";
+import clientSocketInit from "../api/clientSocket";
 function Chat({
   firstName,
   lastName,
@@ -17,13 +17,10 @@ function Chat({
     console.log("Logout", email);
     logoutAction(email);
   };
-
-  //const history = useHistory();
-  /*useEffect(() => {
-    if (loggedOut) {
-      history.push("/");
-    }
-  }, [loggedOut, history]);*/
+  useEffect(() => {
+    console.log("Init client socket");
+    clientSocketInit();
+  }, []);
   return (
     <div className="chat-container">
       <header className="chat-header">

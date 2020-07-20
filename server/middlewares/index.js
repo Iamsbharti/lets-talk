@@ -49,7 +49,7 @@ exports.loginParamValidation = (req, res, next) => {
   next();
 };
 exports.authTokenParamValidation = (req, res, next) => {
-  console.log("auth token param validation", req.header("authToken"));
+  console.log("auth token param validation");
   let authToken = { authToken: req.header("authToken") };
   const schema = joi.object({
     authToken: joi.string().min(15).required(),
@@ -76,7 +76,7 @@ exports.logIp = (req, res, next) => {
   next();
 };
 exports.isAuthorized = async (req, res, next) => {
-  console.log("is authorized middleware", req.header("authToken"));
+  console.log("is authorized middleware");
   //get header
   if (
     req.header("authToken") !== null ||
@@ -88,7 +88,7 @@ exports.isAuthorized = async (req, res, next) => {
     let authExist = await Auth.findOne({ authToken: authTokenReqParam });
     if (authExist) {
       const { authToken, tokenSecret, email } = authExist;
-      console.log("value from db", authToken, tokenSecret, email);
+      console.log("value from db", email);
       //decode and match
       jwt.verify(authToken, tokenSecret, (error, decodedInfo) => {
         if (error !== null) {
@@ -96,7 +96,7 @@ exports.isAuthorized = async (req, res, next) => {
             .staus(401)
             .json(response(true, 401, "Auth Token is not Valid", null));
         } else {
-          console.log("decoded", decodedInfo);
+          console.log("decoded");
           return (req.email = decodedInfo.data.email);
         }
       });
@@ -113,7 +113,7 @@ exports.isAuthorized = async (req, res, next) => {
   next();
 };
 exports.logoutParamValidation = (req, res, next) => {
-  console.log("logout validation", req.body);
+  console.log("logout validation");
   const schema = joi.object({
     email: joi.string().min(6).email().required(),
   });

@@ -49,7 +49,7 @@ exports.loginControl = async (req, res) => {
           response(true, 500, "Token Generation Error", error)
         );
       } else {
-        console.log("token generated", tokenDetails);
+        console.log("token generated");
         tokenDetails.userDetails = userDetails;
         getTokenRes = Promise.resolve(tokenDetails);
       }
@@ -59,7 +59,7 @@ exports.loginControl = async (req, res) => {
   //save token
   const saveToken = async (tokenDetails) => {
     let saveTokenRes;
-    console.log("save token", tokenDetails);
+    console.log("save token");
     const { userDetails, authToken } = tokenDetails;
     const { email } = userDetails;
     const tokenSecret = process.env.TOKEN_SECRET;
@@ -99,7 +99,7 @@ exports.loginControl = async (req, res) => {
     .then(getToken)
     .then(saveToken)
     .then((result) => {
-      console.log(result);
+      console.log("Send Response");
       let api_res = result;
       let { authToken } = result;
       //delete api_res.authToken;
@@ -107,7 +107,7 @@ exports.loginControl = async (req, res) => {
       res.status(200).json(response(false, 200, "Login Success", api_res));
     })
     .catch((error) => {
-      console.log(error);
+      console.log("Error", error);
       res.json(error);
     });
 };
@@ -116,7 +116,7 @@ exports.test = async (req, res) => {
   res.send("test works");
 };
 exports.registerControl = async (req, res) => {
-  console.log("register control", req.body);
+  console.log("register controller");
   const { firstName, lastName, email, password } = req.body;
   //check for any existing emails
   let userExists = await User.findOne({ email: email });
@@ -155,7 +155,7 @@ exports.privateRouteTest = async (req, res) => {
   res.send("pvt route");
 };
 exports.logout = async (req, res) => {
-  console.log("logout routes", req.body);
+  console.log("logout routes");
   let { email } = req.body;
   //delete the auth details from auth-db
   let userExists = await User.findOne({ email: email });
@@ -166,7 +166,7 @@ exports.logout = async (req, res) => {
     return res.json(response(true, 400, "No Auth Details Found", null));
   /**delete entry*/
   let { n } = await Auth.deleteOne({ email: email });
-  console.log("count,", n);
+  console.log("count-delete,", n);
   if (n === 1) {
     console.log("Deleted auth");
     res.status(200).json(response(false, 200, "Logged out", null));

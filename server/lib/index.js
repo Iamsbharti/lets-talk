@@ -11,7 +11,7 @@ exports.response = (error, status, message, data) => {
   return res;
 };
 exports.hashedPassword = async (pwd) => {
-  console.log("hash pwd", pwd);
+  console.log("hash pwd");
   const salt = await bcrypt.genSalt(10);
   let hashed = await bcrypt.hash(pwd, salt);
   return hashed;
