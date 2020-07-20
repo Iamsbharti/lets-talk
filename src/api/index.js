@@ -1,6 +1,6 @@
 import axios from "axios";
 import { toast } from "react-toastify";
-
+import { history } from "./history";
 const url =
   process.env.NODE_ENV === "production" ? "" : "http://localhost:4300/api/chat";
 export async function login({ email, password, room }) {
@@ -94,6 +94,7 @@ export async function logout(email) {
         message,
         loggedOut: true,
       };
+      history.push("/");
       return res;
     }
   } catch (error) {

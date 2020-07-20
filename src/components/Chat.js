@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "../App.css";
 import { connect } from "react-redux";
 import { logoutAction } from "../redux/actions";
-import { useHistory } from "react-router-dom";
+
 function Chat({
   firstName,
   lastName,
@@ -12,22 +12,13 @@ function Chat({
   message,
   logoutAction,
 }) {
-  let history = useHistory();
   const handleLogout = async (event) => {
     event.preventDefault();
     console.log("Logout", email);
     logoutAction(email);
   };
-  //<i class="fas fa-spinner"></i>;
-  useEffect(() => {
-    if (loggedOut) {
-      setTimeout(() => history.push("/"), 2500);
-    }
-  }, [loggedOut]);
 
-  return loggedOut ? (
-    <i className="fas fa-spinner">{message}</i>
-  ) : (
+  return (
     <div className="chat-container">
       <header className="chat-header">
         <h1>

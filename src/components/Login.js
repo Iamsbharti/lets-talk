@@ -76,7 +76,7 @@ function Login({ loginAction, loggedIn }) {
           <Link to="/register">
             <button className="btn">Register</button>
           </Link>
-          {!loggedIn && <span>Login Falied</span>}
+          {loggedIn !== undefined && !loggedIn ? <span>Login Falied</span> : ""}
         </form>
       </main>
     </div>
@@ -84,6 +84,7 @@ function Login({ loginAction, loggedIn }) {
 }
 const mapStateToProps = ({ loginResponse }) => {
   let { loggedIn } = loginResponse;
+  console.log("loggedIn", loggedIn);
   return { loggedIn };
 };
 const mapActionToProps = { loginAction };
