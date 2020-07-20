@@ -7,9 +7,10 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import Chat from "./components/Chat";
 import { connect } from "react-redux";
-function App({ loggedIn }) {
+function App({ isAuthenticated }) {
   const RouterGuard = (Component) => ({ match }) => {
-    if (!loggedIn) {
+    if (!isAuthenticated) {
+      console.log("App routes", match);
       return <Redirect to="/" />;
     } else {
       return <Component match={match} />;
@@ -24,8 +25,8 @@ function App({ loggedIn }) {
     </div>
   );
 }
-const mapStateToProps = ({ loginResponse }) => {
-  let { loggedIn } = loginResponse;
-  return { loggedIn };
+const mapStateToProps = ({ session }) => {
+  let { isAuthenticated } = session.user;
+  return { isAuthenticated };
 };
 export default connect(mapStateToProps)(App);

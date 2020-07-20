@@ -2,13 +2,13 @@ import React from "react";
 import "../App.css";
 import { connect } from "react-redux";
 import { logoutAction } from "../redux/actions";
-
+//import { useHistory } from "react-router-dom";
 function Chat({
   firstName,
   lastName,
   email,
   room,
-  loggedOut,
+  isAuthenticated,
   message,
   logoutAction,
 }) {
@@ -18,6 +18,12 @@ function Chat({
     logoutAction(email);
   };
 
+  //const history = useHistory();
+  /*useEffect(() => {
+    if (loggedOut) {
+      history.push("/");
+    }
+  }, [loggedOut, history]);*/
   return (
     <div className="chat-container">
       <header className="chat-header">
@@ -60,11 +66,18 @@ function Chat({
     </div>
   );
 }
-const mapStateToProps = ({ loginResponse, logoutResponse }) => {
-  let { firstName, lastName, email, room } = loginResponse;
-  let { message, loggedOut } = logoutResponse;
-  console.log("state-chat", room, message, loggedOut);
-  return { firstName, lastName, email, room, message, loggedOut };
+const mapStateToProps = ({ session }) => {
+  let {
+    firstName,
+    lastName,
+    email,
+    room,
+    message,
+    isAuthenticated,
+  } = session.user;
+
+  console.log("state-chat", room, message, isAuthenticated);
+  return { firstName, lastName, email, room, message, isAuthenticated };
 };
 
 const mapActionToProps = { logoutAction };

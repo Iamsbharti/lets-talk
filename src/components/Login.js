@@ -3,7 +3,7 @@ import "../App.css";
 import { Link, useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import { loginAction } from "../redux/actions";
-function Login({ loginAction, loggedIn }) {
+function Login({ loginAction, isAuthenticated, authStatus }) {
   /**define state */
   const [username, setusername] = useState("");
   const [password, setPwd] = useState("");
@@ -22,8 +22,10 @@ function Login({ loginAction, loggedIn }) {
   };
 
   useEffect(() => {
-    loggedIn && setTimeout(() => history.push("/chat"), 1500);
-  }, [loggedIn, history]);
+    if (isAuthenticated) {
+      history.push("/chat");
+    }
+  }, [isAuthenticated, history]);
   return (
     <div className="join-container">
       <header className="join-header">
@@ -76,16 +78,17 @@ function Login({ loginAction, loggedIn }) {
           <Link to="/register">
             <button className="btn">Register</button>
           </Link>
-          {loggedIn !== undefined && !loggedIn ? <span>Login Falied</span> : ""}
+          {authStatus === "NOT_AUTHENTICATED" ? <span>Login Falied</span> : ""}
         </form>
       </main>
     </div>
   );
 }
-const mapStateToProps = ({ loginResponse }) => {
-  let { loggedIn } = loginResponse;
-  console.log("loggedIn", loggedIn);
-  return { loggedIn };
+const mapStateToProps = ({ session }) => {
+  let { isAuthenticated } = session.user;
+  console.log("isAuthenticated", isAuthenticated);
+  console.log("authstatus", session.authStatus);
+  return { isAuthenticated, authStatus: session.authStatus };
 };
 const mapActionToProps = { loginAction };
 export default connect(mapStateToProps, mapActionToProps)(Login);

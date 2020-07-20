@@ -1,6 +1,6 @@
 import axios from "axios";
 import { toast } from "react-toastify";
-import { history } from "./history";
+
 const url =
   process.env.NODE_ENV === "production" ? "" : "http://localhost:4300/api/chat";
 export async function login({ email, password, room }) {
@@ -13,13 +13,13 @@ export async function login({ email, password, room }) {
     });
     //console.log("response", response);
 
-    let { error, status, message, data } = response.data;
+    let { status, message, data } = response.data;
 
     if (status !== 200) {
       /**Error Resposne */
       toast.error(message);
       let userdata = {
-        loggedIn: false,
+        isAuthenticated: false,
       };
       return userdata;
     } else {
@@ -38,9 +38,10 @@ export async function login({ email, password, room }) {
         firstName: firstName,
         lastName: lastName,
         email: email,
-        loggedIn: true,
         room: room,
+        isAuthenticated: true,
       };
+
       return userdata;
     }
   } catch (error) {
@@ -86,15 +87,14 @@ export async function logout(email) {
     if (status !== 200) {
       let res = {
         message,
-        loggedOut: false,
+        isAuthenticated: true,
       };
       return res;
     } else {
       let res = {
         message,
-        loggedOut: true,
+        isAuthenticated: false,
       };
-      history.push("/");
       return res;
     }
   } catch (error) {

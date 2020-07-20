@@ -1,10 +1,14 @@
 import { registerReducer } from "./registerReducer";
-import loginReducer from "./loginReducer";
-import logoutReducer from "./logoutReducer";
 import { combineReducers } from "redux";
-
+import sessionManager from "./sessionReducer";
 export default combineReducers({
   signUpResult: registerReducer,
-  loginResponse: loginReducer,
-  logoutResponse: logoutReducer,
+  session: sessionManager,
 });
+
+/**
+ * import loginReducer from "./loginReducer";
+import logoutReducer from "./logoutReducer";
+ *  loginResponse: loginReducer,
+  logoutResponse: logoutReducer,
+ */
