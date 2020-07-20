@@ -1,12 +1,33 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "../App.css";
 import { connect } from "react-redux";
-function Chat({ firstName, lastName, email, room }) {
-  const handleLogout = (event) => {
+import { logoutAction } from "../redux/actions";
+import { useHistory } from "react-router-dom";
+function Chat({
+  firstName,
+  lastName,
+  email,
+  room,
+  loggedOut,
+  message,
+  logoutAction,
+}) {
+  let history = useHistory();
+  const handleLogout = async (event) => {
     event.preventDefault();
     console.log("Logout", email);
+    logoutAction(email);
   };
-  return (
+  //<i class="fas fa-spinner"></i>;
+  useEffect(() => {
+    if (loggedOut) {
+      setTimeout(() => history.push("/"), 2500);
+    }
+  }, [loggedOut]);
+
+  return loggedOut ? (
+    <i className="fas fa-spinner">{message}</i>
+  ) : (
     <div className="chat-container">
       <header className="chat-header">
         <h1>
@@ -48,10 +69,12 @@ function Chat({ firstName, lastName, email, room }) {
     </div>
   );
 }
-const mapStateToProps = ({ loginResponse }) => {
+const mapStateToProps = ({ loginResponse, logoutResponse }) => {
   let { firstName, lastName, email, room } = loginResponse;
-  console.log("state-chat", room);
-  return { firstName, lastName, email, room };
+  let { message, loggedOut } = logoutResponse;
+  console.log("state-chat", room, message, loggedOut);
+  return { firstName, lastName, email, room, message, loggedOut };
 };
-const mapActionToProps = {};
+
+const mapActionToProps = { logoutAction };
 export default connect(mapStateToProps, mapActionToProps)(Chat);

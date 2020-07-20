@@ -23,5 +23,5 @@ router.get(
   isAuthorized,
   privateRouteTest
 );
-router.delete("/logout", logoutParamValidation, logout);
+router.post("/logout", logoutParamValidation, logout);
 module.exports = router;

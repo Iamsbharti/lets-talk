@@ -75,3 +75,28 @@ export async function register({ firstName, lastName, email, password }) {
     console.log(error);
   }
 }
+export async function logout(email) {
+  console.log("Logout -api-call", email);
+  try {
+    let response = await axios.post(url + "/logout", {
+      email: email,
+    });
+    let { error, message, status } = response.data;
+    console.log("logout-api-response", error, message, status);
+    if (status !== 200) {
+      let res = {
+        message,
+        loggedOut: false,
+      };
+      return res;
+    } else {
+      let res = {
+        message,
+        loggedOut: true,
+      };
+      return res;
+    }
+  } catch (error) {
+    console.log("logout error", error);
+  }
+}
