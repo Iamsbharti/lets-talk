@@ -73,7 +73,7 @@ const mapStateToProps = ({ session }) => {
     isAuthenticated,
   } = session.user;
 
-  console.log("state-chat", room, message, isAuthenticated);
+  //console.log("state-chat", room, message, isAuthenticated);
   return { firstName, lastName, email, room, message, isAuthenticated };
 };
 

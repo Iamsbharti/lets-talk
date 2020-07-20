@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 const url =
   process.env.NODE_ENV === "production" ? "" : "http://localhost:4300/api/chat";
 export async function login({ email, password, room }) {
-  console.log("api-call-login", email, password);
+  // console.log("api-call-login", email, password);
 
   try {
     let response = await axios.post(url + "/login", {
@@ -95,6 +95,9 @@ export async function logout(email) {
         message,
         isAuthenticated: false,
       };
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("firstName");
+      localStorage.removeItem("lastName");
       return res;
     }
   } catch (error) {

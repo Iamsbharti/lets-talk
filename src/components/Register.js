@@ -19,7 +19,7 @@ function Register({ signUpAction, signUpResult }) {
       email: email,
       password: password,
     };
-    console.log("signup action", userdata);
+    //console.log("signup action", userdata);
     signUpAction(userdata);
   };
   //init history

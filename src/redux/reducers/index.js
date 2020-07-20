@@ -5,10 +5,3 @@ export default combineReducers({
   signUpResult: registerReducer,
   session: sessionManager,
 });
-
-/**
- * import loginReducer from "./loginReducer";
-import logoutReducer from "./logoutReducer";
- *  loginResponse: loginReducer,
-  logoutResponse: logoutReducer,
- */

@@ -11,7 +11,7 @@ export default function sessionManager(
   usersession = session_state.session || {},
   action
 ) {
-  console.log("Session manager");
+  //console.log("Session manager");
   switch (action.type) {
     case LOGIN:
       return {
