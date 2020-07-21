@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "../App.css";
 import { connect } from "react-redux";
 import { logoutAction } from "../redux/actions";
-import clientSocketInit from "../api/clientSocket";
+import clientSocket from "../api/clientSocket";
 function Chat({
   firstName,
   lastName,
@@ -17,10 +17,7 @@ function Chat({
     console.log("Logout", email);
     logoutAction(email);
   };
-  useEffect(() => {
-    console.log("Init client socket");
-    clientSocketInit();
-  }, []);
+  clientSocket();
   return (
     <div className="chat-container">
       <header className="chat-header">

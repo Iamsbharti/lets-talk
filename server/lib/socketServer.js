@@ -8,7 +8,6 @@ exports.socketServer = (server) => {
 
   //on connection
   myio.on("connection", (socket) => {
-    console.log("Client connected");
     socket.emit("testconn", "handshake from server");
     socket.on("test-client", (data) => {
       console.log("Message from client", data);
