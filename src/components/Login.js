@@ -12,7 +12,7 @@ function Login({ loginAction, isAuthenticated, authStatus }) {
 
   const handleLogin = (event) => {
     event.preventDefault();
-    console.log(username, password, room);
+    //console.log(username, password, room);
     let userdata = {
       email: username,
       password: password,

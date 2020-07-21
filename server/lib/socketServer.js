@@ -8,10 +8,11 @@ exports.socketServer = (server) => {
 
   //on connection
   myio.on("connection", (socket) => {
-    socket.emit("testconn", "handshake from server");
     socket.on("test-client", (data) => {
-      console.log("Message from client", data);
+      console.log(data);
+      socket.emit("testconn", "Welcome to Chat app");
     });
+
     socket.on("disconnect", (data) => {
       console.log("Client Disconnected");
     });

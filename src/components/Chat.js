@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../App.css";
 import { connect } from "react-redux";
 import { logoutAction } from "../redux/actions";
-import clientSocket from "../api/clientSocket";
+import { clientSocket, welcomeMessage } from "../api/clientSocket";
 function Chat({
   firstName,
   lastName,
@@ -17,7 +17,12 @@ function Chat({
     console.log("Logout", email);
     logoutAction(email);
   };
-  clientSocket();
+  //state init
+  const [welcomeTxt, setWelTxt] = useState("");
+  useEffect(() => {
+    clientSocket();
+    welcomeMessage((data) => setWelTxt(data));
+  }, [isAuthenticated]);
   return (
     <div className="chat-container">
       <header className="chat-header">
@@ -25,7 +30,7 @@ function Chat({
           <i className="fas fa-comments"></i>
           {`${firstName},${lastName}`}
         </h1>
-
+        {welcomeTxt}
         <h2 className="logout-div" onClick={handleLogout}>
           <i className="fas fa-sign-out-alt"></i>Logout
         </h2>
@@ -70,7 +75,7 @@ const mapStateToProps = ({ session }) => {
     isAuthenticated,
   } = session.user;
 
-  //console.log("state-chat", room, message, isAuthenticated);
+  console.log("state-chat", isAuthenticated);
   return { firstName, lastName, email, room, message, isAuthenticated };
 };
 
