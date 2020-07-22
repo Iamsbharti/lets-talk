@@ -24,11 +24,18 @@ function Chat({
     console.log("Logout", email);
     logoutAction(email);
   };
+  const sendMessage = async (event) => {
+    event.preventDefault();
+    console.log("Sending text");
+    /**Emmit text send event */
+    socket.emit("textSent", textMessage);
+  };
   //state init
   const [welcomeTxt, setWelTxt] = useState("");
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [online, setOnline] = useState(false);
-
+  const [textMessage, setTextMessage] = useState("");
+  const [recievedText, setRecievedText] = useState("");
   useEffect(() => {
     /**Listen to welcome mesg from server */
     socket.on("welcome", (data) => {
@@ -58,6 +65,11 @@ function Chat({
       if (data.split(" ")[0] !== firstName) {
         toast.success(data);
       }
+    });
+
+    /**Listen for incoming text */
+    socket.on("textRecieved", (data) => {
+      setRecievedText(data);
     });
   }, [isAuthenticated]);
   console.log("data", online, onlineUsers);
@@ -90,7 +102,7 @@ function Chat({
             </ul>
           }
         </div>
-        <div className="chat-messages"></div>
+        <div className="chat-messages">{recievedText}</div>
       </main>
       <div className="chat-form-container">
         <form id="chat-form">
@@ -100,8 +112,10 @@ function Chat({
             placeholder="Enter Message"
             required
             autoComplete="off"
+            value={textMessage}
+            onChange={(event) => setTextMessage(event.target.value)}
           />
-          <button className="btn">
+          <button className="btn" onClick={sendMessage}>
             <i className="fas fa-paper-plane"></i>Send Message
           </button>
         </form>
