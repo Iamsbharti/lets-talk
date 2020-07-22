@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import "../App.css";
 import { connect } from "react-redux";
 import { logoutAction } from "../redux/actions";
-import { clientSocket, welcomeMessage } from "../api/clientSocket";
+//import { clientSocket, welcomeMessage } from "../api/clientSocket";
 import io from "socket.io-client";
+import { toast } from "react-toastify";
 const url =
   process.env.NODE_ENV === "production" ? "" : "http://localhost:4300/chat";
 
@@ -25,13 +26,30 @@ function Chat({
   };
   //state init
   const [welcomeTxt, setWelTxt] = useState("");
+  const [onlineUsers, setOnlineUsers] = useState();
+  const [online, setOnline] = useState(false);
   let fullname = `${firstName},${lastName}`;
+
   useEffect(() => {
-    clientSocket();
-    welcomeMessage((data) => setWelTxt(data));
+    console.log("Listen to welcome mesg from server");
+    socket.on("welcome", (data) => {
+      //console.log("From Server:", data);
+      setWelTxt(data);
+    });
+    console.log("Listen to broadcast online user");
+    socket.on("userJoined", (data) => {
+      setOnline(true);
+    });
+    console.log("Emmit the username");
     socket.emit("userEmail", firstName);
     socket.on("msg", (data) => console.log(data));
-  }, [isAuthenticated, firstName]);
+    console.log("Listen to online user array");
+    socket.on("onlineusers", (data) => {
+      setOnlineUsers(data);
+    });
+    console.log("online users", onlineUsers);
+    online && toast.success(online);
+  });
 
   return (
     <div className="chat-container">
@@ -54,7 +72,13 @@ function Chat({
           <h3>
             <i className="fas fa-users"></i>Users
           </h3>
-          <ul></ul>
+          {/*{online && (
+            <ul>
+              {onlineUsers.map((index, user) => (
+                <li key={index}>{user}</li>
+              ))}
+            </ul>
+          )}*/}
         </div>
         <div className="chat-messages"></div>
       </main>

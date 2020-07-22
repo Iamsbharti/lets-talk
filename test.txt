@@ -7,16 +7,18 @@ exports.socketServer = (server) => {
   let onlineUsers = [];
   //on connection
   myio.on("connect", (socket) => {
-    socket.emit("welcome", "Welcome to Chat app");
-    socket.broadcast.emit("userJoined", "User joined the room");
-
+    socket.on("test-client", (data) => {
+      console.log(data);
+      socket.emit("welcome", "Welcome to Chat app");
+      socket.broadcast.emit("msg", "User joined the room");
+    });
     socket.on("userEmail", (data) => {
       socket.broadcast.emit("msg", `${data} came online`);
       console.log("online user", data);
       onlineUsers.push(data);
+      console.log("onlineusers:", onlineUsers);
+      socket.broadcast.emit("onlineusers", onlineUsers);
     });
-    console.log("onlineusers:", onlineUsers);
-    socket.broadcast.emit("onlineusers", onlineUsers);
 
     socket.on("disconnect", () => {
       console.log("Client Disconnected");
