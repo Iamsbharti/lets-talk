@@ -10,7 +10,7 @@ exports.socketServer = (server) => {
     socket.emit("welcome", "Welcome to Chat app");
 
     socket.on("userEmail", (data) => {
-      myio.emit("msg", `${data} came online`);
+      myio.emit("instantOnline", `${data} came online`);
       console.log("online user", data);
       onlineUsers.push(data);
     });

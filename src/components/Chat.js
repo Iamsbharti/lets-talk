@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import "../App.css";
 import { connect } from "react-redux";
 import { logoutAction } from "../redux/actions";
-//import { clientSocket, welcomeMessage } from "../api/clientSocket";
 import io from "socket.io-client";
 import { toast } from "react-toastify";
+
 const url =
   process.env.NODE_ENV === "production" ? "" : "http://localhost:4300/chat";
 
@@ -30,31 +30,35 @@ function Chat({
   const [online, setOnline] = useState(false);
 
   useEffect(() => {
-    console.log("Listen to welcome mesg from server");
+    /**Listen to welcome mesg from server */
     socket.on("welcome", (data) => {
       //console.log("From Server:", data);
       setWelTxt(data);
     });
-    console.log("Listen to broadcast online user");
+
+    /**Listen to broadcast online user */
     socket.on("userJoined", (data) => {
       setOnline(true);
     });
-    console.log("Emmit the username");
+
+    /**Emmit the username */
     socket.emit("userEmail", firstName);
+
+    /**Emmit the room name */
     socket.emit("room", room);
-    socket.on("msg", (data) => console.log(data));
-    console.log("Listen to online user array");
+
+    /**Listen to online user array */
     socket.on("online-users", (data) => {
       console.log("data", data);
       setOnlineUsers(data);
     });
-    socket.on("msg", (data) => {
+
+    /**Listen for real time online users */
+    socket.on("instantOnline", (data) => {
       if (data.split(" ")[0] !== firstName) {
         toast.success(data);
       }
     });
-    //console.log("online users", onlineUsers);
-    //online && toast.success("online");
   }, [isAuthenticated]);
   console.log("data", online, onlineUsers);
   return (
