@@ -8,15 +8,23 @@ exports.socketServer = (server) => {
   //on connection
   myio.on("connect", (socket) => {
     socket.emit("welcome", "Welcome to Chat app");
-    socket.broadcast.emit("userJoined", "User joined the room");
 
     socket.on("userEmail", (data) => {
-      socket.broadcast.emit("msg", `${data} came online`);
+      myio.emit("msg", `${data} came online`);
       console.log("online user", data);
       onlineUsers.push(data);
     });
-    console.log("onlineusers:", onlineUsers);
-    socket.broadcast.emit("onlineusers", onlineUsers);
+
+    socket.on("room", (room) => {
+      console.log("Room", room);
+      //set chat room
+      socket.room = room;
+      //join chat room
+      socket.join(socket.room);
+      console.log("onlineusers-array", onlineUsers);
+      myio.emit("online-users", onlineUsers);
+      //socket.to(socket.room).broadcast.emit("online-users", onlineUsers);
+    });
 
     socket.on("disconnect", () => {
       console.log("Client Disconnected");

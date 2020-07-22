@@ -26,9 +26,8 @@ function Chat({
   };
   //state init
   const [welcomeTxt, setWelTxt] = useState("");
-  const [onlineUsers, setOnlineUsers] = useState();
+  const [onlineUsers, setOnlineUsers] = useState([]);
   const [online, setOnline] = useState(false);
-  let fullname = `${firstName},${lastName}`;
 
   useEffect(() => {
     console.log("Listen to welcome mesg from server");
@@ -42,21 +41,28 @@ function Chat({
     });
     console.log("Emmit the username");
     socket.emit("userEmail", firstName);
+    socket.emit("room", room);
     socket.on("msg", (data) => console.log(data));
     console.log("Listen to online user array");
-    socket.on("onlineusers", (data) => {
+    socket.on("online-users", (data) => {
+      console.log("data", data);
       setOnlineUsers(data);
     });
-    console.log("online users", onlineUsers);
-    online && toast.success(online);
-  });
-
+    socket.on("msg", (data) => {
+      if (data.split(" ")[0] !== firstName) {
+        toast.success(data);
+      }
+    });
+    //console.log("online users", onlineUsers);
+    //online && toast.success("online");
+  }, [isAuthenticated]);
+  console.log("data", online, onlineUsers);
   return (
     <div className="chat-container">
       <header className="chat-header">
         <h1>
           <i className="fas fa-comments"></i>
-          {fullname}
+          {firstName}
         </h1>
         {welcomeTxt}
         <h2 className="logout-div" onClick={handleLogout}>
@@ -72,13 +78,13 @@ function Chat({
           <h3>
             <i className="fas fa-users"></i>Users
           </h3>
-          {/*{online && (
+          {
             <ul>
-              {onlineUsers.map((index, user) => (
+              {onlineUsers.map((user, index) => (
                 <li key={index}>{user}</li>
               ))}
             </ul>
-          )}*/}
+          }
         </div>
         <div className="chat-messages"></div>
       </main>
