@@ -3,6 +3,12 @@ import "../App.css";
 import { connect } from "react-redux";
 import { logoutAction } from "../redux/actions";
 import { clientSocket, welcomeMessage } from "../api/clientSocket";
+import io from "socket.io-client";
+const url =
+  process.env.NODE_ENV === "production" ? "" : "http://localhost:4300/chat";
+
+const socket = io(url);
+//console.log("socket", socket);
 function Chat({
   firstName,
   lastName,
@@ -19,17 +25,20 @@ function Chat({
   };
   //state init
   const [welcomeTxt, setWelTxt] = useState("");
+  let fullname = `${firstName},${lastName}`;
   useEffect(() => {
     clientSocket();
     welcomeMessage((data) => setWelTxt(data));
-  }, [isAuthenticated]);
+    socket.emit("userEmail", firstName);
+    socket.on("msg", (data) => console.log(data));
+  }, [isAuthenticated, firstName]);
 
   return (
     <div className="chat-container">
       <header className="chat-header">
         <h1>
           <i className="fas fa-comments"></i>
-          {`${firstName},${lastName}`}
+          {fullname}
         </h1>
         {welcomeTxt}
         <h2 className="logout-div" onClick={handleLogout}>
