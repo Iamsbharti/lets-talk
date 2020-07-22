@@ -1,6 +1,6 @@
 import axios from "axios";
 import { toast } from "react-toastify";
-
+//import { disconnect } from "../api/clientSocket";
 const url =
   process.env.NODE_ENV === "production" ? "" : "http://localhost:4300/api/chat";
 export async function login({ email, password, room }) {
@@ -77,7 +77,7 @@ export async function register({ firstName, lastName, email, password }) {
   }
 }
 export async function logout(email) {
-  console.log("Logout -api-call", email);
+  // console.log("Logout -api-call", email);
   try {
     let response = await axios.post(url + "/logout", {
       email: email,
@@ -95,9 +95,13 @@ export async function logout(email) {
         message,
         isAuthenticated: false,
       };
+      /**Remove tokens from localstorage */
       localStorage.removeItem("authToken");
       localStorage.removeItem("firstName");
       localStorage.removeItem("lastName");
+
+      /**Emmit disconnect web socket listener */
+      // disconnect();
       return res;
     }
   } catch (error) {

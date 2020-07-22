@@ -23,6 +23,7 @@ function Chat({
     clientSocket();
     welcomeMessage((data) => setWelTxt(data));
   }, [isAuthenticated]);
+
   return (
     <div className="chat-container">
       <header className="chat-header">
@@ -75,7 +76,7 @@ const mapStateToProps = ({ session }) => {
     isAuthenticated,
   } = session.user;
 
-  console.log("state-chat", isAuthenticated);
+  //console.log("state-chat", isAuthenticated);
   return { firstName, lastName, email, room, message, isAuthenticated };
 };
 
