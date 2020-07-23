@@ -28,7 +28,7 @@ export async function login({ email, password, room }) {
       //console.log(authToken);
       /**Store AuthToken for chat authorization*/
       localStorage.setItem("authToken", authToken);
-      let { firstName, lastName } = data.userDetails;
+      let { firstName, lastName, userid } = data.userDetails;
       localStorage.setItem("firstName", firstName);
       localStorage.setItem("lastName", lastName);
       //console.log(firstName, lastName);
@@ -40,6 +40,7 @@ export async function login({ email, password, room }) {
         email: email,
         room: room,
         isAuthenticated: true,
+        userid: userid,
       };
 
       return userdata;

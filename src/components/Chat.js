@@ -128,13 +128,14 @@ const mapStateToProps = ({ session }) => {
     firstName,
     lastName,
     email,
+    userid,
     room,
     message,
     isAuthenticated,
   } = session.user;
 
   //console.log("state-chat", isAuthenticated);
-  return { firstName, lastName, email, room, message, isAuthenticated };
+  return { userid, firstName, lastName, email, room, message, isAuthenticated };
 };
 
 const mapActionToProps = { logoutAction };
