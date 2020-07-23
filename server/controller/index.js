@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const shortid = require("shortid");
 const {
   response,
   hashedPassword,
@@ -129,6 +130,7 @@ exports.registerControl = async (req, res) => {
     lastName: lastName,
     email: email,
     password: hashed,
+    userid: shortid.generate(),
   });
   //console.log(newUser);
   await User.create(newUser, (error, user) => {
