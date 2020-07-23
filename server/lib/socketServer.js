@@ -20,12 +20,10 @@ exports.socketServer = (server) => {
     /**Listen to room name and emit online users list */
     socket.on("room", (room) => {
       console.log("Room", room);
-      //set chat room
-      socket.room = room;
       //join chat room
-      socket.join(socket.room);
+      socket.join(room);
       console.log("onlineusers-array", onlineUsers);
-      myio.emit("online-users", onlineUsers);
+      myio.to(room).emit("online-users", onlineUsers);
     });
     /**Listen to text-message */
     socket.on("textSent", (data) => {
@@ -33,9 +31,12 @@ exports.socketServer = (server) => {
       myio.emit("textRecieved", data);
     });
     /**Listen to disconnect event */
-    socket.on("disconnect", () => {
-      console.log("Client Disconnected");
-      //myio.emit("logout", "user left the room");
+    socket.on("offline", (data) => {
+      console.log("Client Disconnected", data);
+      myio.emit("userOffline", `${data} left the room`);
+      onlineUsers = onlineUsers.filter((user) => user !== data);
+      console.log("offline", onlineUsers);
+      return onlineUsers;
     });
   });
 };

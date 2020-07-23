@@ -15,18 +15,21 @@ function Chat({
   lastName,
   email,
   room,
+  userid,
   isAuthenticated,
   message,
   logoutAction,
 }) {
   const handleLogout = async (event) => {
     event.preventDefault();
-    console.log("Logout", email);
+    //console.log("Logout", email);
     logoutAction(email);
+    //console.log("emit disconnect");
+    socket.emit("offline", firstName);
   };
   const sendMessage = async (event) => {
     event.preventDefault();
-    console.log("Sending text");
+    //console.log("Sending text");
     /**Emmit text send event */
     socket.emit("textSent", textMessage);
   };
@@ -36,6 +39,16 @@ function Chat({
   const [online, setOnline] = useState(false);
   const [textMessage, setTextMessage] = useState("");
   const [recievedText, setRecievedText] = useState("");
+
+  //sender's info
+  let chatMessage = {
+    senderEmail: email,
+    senderId: userid,
+    content: textMessage,
+    createdOn: Date.now(),
+    senderName: firstName,
+  };
+  // console.log("Chat Message", chatMessage);
   useEffect(() => {
     /**Listen to welcome mesg from server */
     socket.on("welcome", (data) => {
@@ -56,7 +69,6 @@ function Chat({
 
     /**Listen to online user array */
     socket.on("online-users", (data) => {
-      console.log("data", data);
       setOnlineUsers(data);
     });
 
@@ -71,8 +83,13 @@ function Chat({
     socket.on("textRecieved", (data) => {
       setRecievedText(data);
     });
+
+    /**Listen to offline listeners */
+    socket.on("userOffline", (data) => {
+      toast.error(data);
+    });
   }, [isAuthenticated]);
-  console.log("data", online, onlineUsers);
+  //console.log("data", online, onlineUsers);
   return (
     <div className="chat-container">
       <header className="chat-header">
@@ -96,9 +113,10 @@ function Chat({
           </h3>
           {
             <ul>
-              {onlineUsers.map((user, index) => (
-                <li key={index}>{user}</li>
-              ))}
+              {onlineUsers.map(
+                (user, index) =>
+                  user !== firstName && <li key={index}>{user}</li>
+              )}
             </ul>
           }
         </div>
