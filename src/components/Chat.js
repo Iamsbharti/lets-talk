@@ -20,6 +20,7 @@ function Chat({
   message,
   logoutAction,
 }) {
+  console.log("render chat");
   const handleLogout = async (event) => {
     event.preventDefault();
     //console.log("Logout", email);
@@ -36,7 +37,6 @@ function Chat({
   //state init
   const [welcomeTxt, setWelTxt] = useState("");
   const [onlineUsers, setOnlineUsers] = useState([]);
-  const [online, setOnline] = useState(false);
   const [textMessage, setTextMessage] = useState("");
   const [recievedText, setRecievedText] = useState("");
 
@@ -48,17 +48,35 @@ function Chat({
     createdOn: Date.now(),
     senderName: firstName,
   };
-  // console.log("Chat Message", chatMessage);
+
+  /**Socket listeners on users actions */
+  /**Listen to online user array */
+  socket.on("online-users", (data) => {
+    setOnlineUsers(data);
+  });
+
+  /**Listen for real time online users */
+  socket.on("instantOnline", (data) => {
+    if (data !== firstName) {
+      toast.info(data + " online");
+    }
+    //setOnline(true);
+  });
+  /**Listen for incoming text */
+  socket.on("textRecieved", (data) => {
+    setRecievedText(data);
+  });
+
+  /**Listen to offline listeners */
+  socket.on("userOffline", (data) => {
+    toast.info(data + " online");
+    //setOnline(false);
+  });
   useEffect(() => {
     /**Listen to welcome mesg from server */
     socket.on("welcome", (data) => {
       //console.log("From Server:", data);
       setWelTxt(data);
-    });
-
-    /**Listen to broadcast online user */
-    socket.on("userJoined", (data) => {
-      setOnline(true);
     });
 
     /**Emmit the username */
@@ -67,27 +85,7 @@ function Chat({
     /**Emmit the room name */
     socket.emit("room", room);
 
-    /**Listen to online user array */
-    socket.on("online-users", (data) => {
-      setOnlineUsers(data);
-    });
-
-    /**Listen for real time online users */
-    socket.on("instantOnline", (data) => {
-      if (data.split(" ")[0] !== firstName) {
-        toast.success(data);
-      }
-    });
-
-    /**Listen for incoming text */
-    socket.on("textRecieved", (data) => {
-      setRecievedText(data);
-    });
-
-    /**Listen to offline listeners */
-    socket.on("userOffline", (data) => {
-      toast.error(data);
-    });
+    // console.log("Chat Message", chatMessage);
   }, [isAuthenticated]);
   //console.log("data", online, onlineUsers);
   return (

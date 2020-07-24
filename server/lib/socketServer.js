@@ -9,10 +9,9 @@ exports.socketServer = (server) => {
   myio.on("connect", (socket) => {
     /**Emmitt welcome text */
     socket.emit("welcome", "Welcome to Chat app");
-
+    myio.emit("instantOnline", "user");
     /**Listen to users'name */
     socket.on("userEmail", (data) => {
-      myio.emit("instantOnline", `${data} came online`);
       console.log("online user", data);
       onlineUsers.push(data);
     });
